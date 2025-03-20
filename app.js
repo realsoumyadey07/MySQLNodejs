@@ -1,15 +1,19 @@
-import express from "express";
-import dotenv from "dotenv";
-dotenv.config();
+import mysql from "mysql2/promise";
 
-const PORT = process.env.PORT || 8000;
+const db = await mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "2002",
+  database: "college",
+});
 
-const app = express();
+console.log("MySQL connected successfully!");
 
-app.get("/", async(_, res)=> {
-    res.send("hello world!");
-})
+// await db.execute("CREATE DATABASE IF NOT EXISTS college");
 
-app.listen(PORT, async()=> {
-    console.log(`Server is connected to port ${PORT}`);
-})
+// console.log(await db.execute("SHOW DATABASES"));
+
+await db.execute(`CREATE TABLE IF NOT EXISTS students (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    age INT NOT NULL);`);
